@@ -5,11 +5,12 @@ CANARI (surface OI) + 3D-Var upper-air DA cycle.
 
 """
 
-from typing import List, Optional
+from typing import List
+
+from tactus.eps.eps_setup import get_member_config
 
 from ..submission import TaskSettings
 from .base import EcflowSuiteFamily, EcflowSuiteTask
-
 
 # ---------------------------------------------------------------------------
 # Default obs-type lists
@@ -34,6 +35,7 @@ _DEFAULT_OBS_3DVAR: List[str] = [
 # ---------------------------------------------------------------------------
 # OdbFamily — parallel BATOR tasks + OdbMerge
 # ---------------------------------------------------------------------------
+
 
 class OdbFamily(EcflowSuiteFamily):
     """ecFlow family that runs BATOR per obs type.
@@ -278,7 +280,9 @@ class VariationalFamily(EcflowSuiteFamily):
             ecf_files_remotely=ecf_files_remotely,
         )
 
+
 # PerturbationsFamily — perturb some parameters in the initial surface file
+
 
 class PerturbationsFamily(EcflowSuiteFamily):
     """ecFlow family for Perturbations.
@@ -334,8 +338,7 @@ class PerturbationsFamily(EcflowSuiteFamily):
 
 
 class AssimilationFamily(EcflowSuiteFamily):
-    """Top-level DA family containing the surface OI and optionally 3D-Var.
-    """
+    """Top-level DA family containing the surface OI and optionally 3D-Var."""
 
     def __init__(
         self,
@@ -344,6 +347,7 @@ class AssimilationFamily(EcflowSuiteFamily):
         task_settings: TaskSettings,
         input_template,
         ecf_files,
+        member,
         trigger=None,
         ecf_files_remotely=None,
     ):
@@ -377,8 +381,9 @@ class AssimilationFamily(EcflowSuiteFamily):
             ecf_files_remotely=ecf_files_remotely,
         )
 
+        mbr_config = get_member_config(config, member)
         # PertSFC
-        if config.get("da.do_pertsurf", True):
+        if mbr_config.get("da.do_pertsurf"):
             PerturbationsFamily(
                 self,
                 config,

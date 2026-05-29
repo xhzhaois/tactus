@@ -4,11 +4,14 @@
 [boundaries.ifs]
   selection = "IFSENS"
 
+[suite_control]
+  do_assimilation = true
+
 [eps.general]
   members = "0:2"
 
 [eps.member_settings.boundaries.ifs]
   bdmember = "0:2"
 
-[eps.member_settings]
-  do_pertsurf = {0 = false, 1 = true} 
+[eps.member_settings.da]
+  do_pertsurf = {0 = false, 1 = true}
