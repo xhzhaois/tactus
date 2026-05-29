@@ -11,4 +11,4 @@
   bdmember = "0:2"
 
 [eps.member_settings]
-  do_pertsurf = {0 = false, 1 = true} 
+  do_pertsurf = { 0 = false, 1 = true }
