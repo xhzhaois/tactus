@@ -24,10 +24,8 @@ from tactus.suites.base import (
     EcflowSuiteTrigger,
     EcflowSuiteTriggers,
 )
-
 from tactus.suites.da_components import AssimilationFamily
 from tactus.suites.suite_utils import Cycles, lbc_times_generator, slaf_planner
-
 from tactus.toolbox import Platform
 
 
@@ -273,7 +271,6 @@ class StaticDataFamily(EcflowSuiteFamily):
                 ecf_files_remotely=ecf_files_remotely,
                 limit=static_data_limit,
             )
-
 
 
 class StaticDataMemberGenerator:
@@ -1324,6 +1321,7 @@ class CycleFamily(EcflowSuiteFamily):
         task_settings: TaskSettings,
         input_template,
         ecf_files,
+        member,
         trigger=None,
         ecf_files_remotely=None,
     ):
@@ -1352,6 +1350,7 @@ class CycleFamily(EcflowSuiteFamily):
                 task_settings,
                 input_template,
                 ecf_files,
+                member,
                 trigger=initialization_family,
                 ecf_files_remotely=ecf_files_remotely,
             )
@@ -1658,6 +1657,7 @@ class TimeDependentFamily(EcflowSuiteFamily):
                     task_settings,
                     input_template,
                     ecf_files,
+                    member,
                     trigger=ready_for_cycle,
                     ecf_files_remotely=ecf_files_remotely,
                 )

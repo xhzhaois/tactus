@@ -5,7 +5,9 @@ CANARI (surface OI) + 3D-Var upper-air DA cycle.
 
 """
 
-from typing import List, Optional
+from typing import List
+
+from tactus.eps.eps_setup import get_member_config
 
 from ..submission import TaskSettings
 from .base import EcflowSuiteFamily, EcflowSuiteTask
@@ -345,6 +347,7 @@ class AssimilationFamily(EcflowSuiteFamily):
         task_settings: TaskSettings,
         input_template,
         ecf_files,
+        member,
         trigger=None,
         ecf_files_remotely=None,
     ):
@@ -378,8 +381,9 @@ class AssimilationFamily(EcflowSuiteFamily):
             ecf_files_remotely=ecf_files_remotely,
         )
 
+        mbr_config = get_member_config(config, member)
         # PertSFC
-        if config.get("da.do_pertsurf"):
+        if mbr_config.get("da.do_pertsurf"):
             PerturbationsFamily(
                 self,
                 config,
