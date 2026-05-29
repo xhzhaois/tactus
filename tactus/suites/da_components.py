@@ -278,6 +278,55 @@ class VariationalFamily(EcflowSuiteFamily):
             ecf_files_remotely=ecf_files_remotely,
         )
 
+# PerturbationsFamily — perturb some parameters in the initial surface file
+
+class PerturbationsFamily(EcflowSuiteFamily):
+    """ecFlow family for Perturbations.
+
+    Tasks within this family:
+    1. PertSFC - perturb some paramters in the initial surface file.
+    """
+
+    def __init__(
+        self,
+        parent,
+        config,
+        task_settings: TaskSettings,
+        input_template,
+        ecf_files,
+        trigger=None,
+        ecf_files_remotely=None,
+    ):
+        """Construct PerturbationsFamily.
+
+        Args:
+            parent: Parent ecFlow node.
+            config: Experiment config.
+            task_settings: Submission configuration.
+            input_template: ecFlow job template.
+            ecf_files: Local ecf script path prefix.
+            trigger: Optional trigger for the whole Perturbations family.
+            ecf_files_remotely: Remote ecf script path prefix.
+        """
+        super().__init__(
+            "Perturbations",
+            parent,
+            ecf_files,
+            trigger=trigger,
+            variables={"DA_STREAM": "pertsfc"},
+            ecf_files_remotely=ecf_files_remotely,
+        )
+
+        PertSFC = EcflowSuiteTask(
+            "PertSFC",
+            self,
+            config,
+            task_settings,
+            ecf_files,
+            input_template=input_template,
+            ecf_files_remotely=ecf_files_remotely,
+        )
+
 
 # ---------------------------------------------------------------------------
 # AssimilationFamily — top-level DA family
@@ -327,6 +376,18 @@ class AssimilationFamily(EcflowSuiteFamily):
             ecf_files,
             ecf_files_remotely=ecf_files_remotely,
         )
+
+        # PertSFC
+        if config.get("da.do_pertsurf", True):
+            PerturbationsFamily(
+                self,
+                config,
+                task_settings,
+                input_template,
+                ecf_files,
+                trigger=surface_family,
+                ecf_files_remotely=ecf_files_remotely,
+            )
 
         # Upper-air 3D-Var chain — optional (da.do_upper_air, default true)
         if config.get("da.do_upper_air", True):
