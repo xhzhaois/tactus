@@ -1,0 +1,14 @@
+[general.times]
+  start = "-P1D"
+
+[boundaries.ifs]
+  selection = "IFSENS"
+
+[eps.general]
+  members = "0:2"
+
+[eps.member_settings.boundaries.ifs]
+  bdmember = "0:2"
+
+[eps.member_settings]
+  do_pertsurf = {0 = false, 1 = true} 
